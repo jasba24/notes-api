@@ -1,7 +1,7 @@
 const express = require('express')
+const app = express()
 const logger = require('./loggerMiddleware')
 const cors = require('cors')
-const app = express()
 
 app.use(logger)
 app.use(cors())
