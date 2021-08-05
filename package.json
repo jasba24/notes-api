@@ -1,30 +1,37 @@
 {
-	"name": "part3",
-	"version": "1.0.0",
-	"description": "",
-	"main": "index.js",
-	"scripts": {
-		"dev": "nodemon  index.js",
-		"start": "node  index.js",
-		"lint": "eslint . --fix",
-		"test": "echo \"Error: no test specified\" && exit 1"
-	},
-	"keywords": [],
-	"author": "Sebastian Buitrago <johanbuitrago342@gmail.com>",
-	"license": "MIT",
-	"devDependencies": {
-		"nodemon": "2.0.12",
-		"standard": "16.0.3"
-	},
-	"dependencies": {
-		"@sentry/node": "^6.10.0",
-		"@sentry/tracing": "^6.10.0",
-		"cors": "2.8.5",
-		"dotenv": "^10.0.0",
-		"express": "4.17.1",
-		"mongoose": "5.13.5"
-	},
-	"eslintConfig": {
-		"extends": "./node_modules/standard/eslintrc.json"
-	}
+  "name": "part3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon  index.js",
+    "start": "node  index.js",
+    "lint": "eslint . --fix",
+    "test": "jest --verbose --watch"
+  },
+  "keywords": [],
+  "author": "Sebastian Buitrago <johanbuitrago342@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "27.0.6",
+    "nodemon": "2.0.12",
+    "standard": "16.0.3"
+  },
+  "dependencies": {
+    "@sentry/node": "^6.10.0",
+    "@sentry/tracing": "^6.10.0",
+    "cors": "2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "4.17.1",
+    "mongoose": "5.13.5"
+  },
+  "eslintConfig": {
+    "extends": "./node_modules/standard/eslintrc.json",
+    "env": {
+      "jest": true
+    }
+  },
+  "jest": {
+    "testEnviroment": "node"
+  }
 }
