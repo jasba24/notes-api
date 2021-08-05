@@ -2,14 +2,6 @@ POST http://localhost:3001/api/notes
 Content-Type: application/json
 
 {
-	"content": "Esto es una nueva nota"
-}
-
-###
-
-POST http://localhost:3001/api/notes
-Content-Type: application/json
-
-{
-	"content": "Esto es una nueva nota"
+	"content": "Suscribete a @midudev",
+	"important": true
 }
