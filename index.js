@@ -42,10 +42,9 @@ app.get('/', (req, res) => {
   res.send('<h1>Hello World</h1>')
 })
 
-app.get('/api/notes', (req, res) => {
-  Note.find({}).then(notes => {
-    res.json(notes)
-  })
+app.get('/api/notes', async (req, res) => {
+  const notes = await Note.find({})
+  res.json(notes)
 })
 
 app.get('/api/notes/:id', (req, res, next) => {
@@ -61,11 +60,10 @@ app.get('/api/notes/:id', (req, res, next) => {
     .catch(err => next(err))
 })
 
-app.delete('/api/notes/:id', (req, res, next) => {
+app.delete('/api/notes/:id', async (req, res, next) => {
   const id = req.params.id
-  Note.findByIdAndRemove(id).then(result => {
-    res.status(204).end()
-  }).catch(err => next(err))
+  await Note.findByIdAndRemove(id)
+  res.status(204).end()
 })
 
 app.put('/api/notes/:id', (req, res, next) => {
@@ -81,7 +79,7 @@ app.put('/api/notes/:id', (req, res, next) => {
   }).catch(err => next(err))
 })
 
-app.post('/api/notes', (req, res) => {
+app.post('/api/notes', async (req, res, next) => {
   const note = req.body
 
   if (!note || !note.content) {
@@ -96,9 +94,12 @@ app.post('/api/notes', (req, res) => {
     important: typeof note.important !== 'undefined' ? note.important : false
   })
 
-  newNote.save().then(saveNote => {
+  try {
+    const saveNote = await newNote.save()
     res.status(201).json(saveNote)
-  })
+  } catch (error) {
+    next(error)
+  }
 })
 
 // The error handler must be before any other error middleware and after all controllers
@@ -107,6 +108,8 @@ app.use(Sentry.Handlers.errorHandler())
 app.use(NotFound)
 app.use(CastError)
 
-const PORT = process.env.PORT
+const PORT = process.env.PORT || 3001
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
+const server = app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
+
+module.exports = { app, server }
