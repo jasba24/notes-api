@@ -4,10 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon  index.js",
-    "start": "node  index.js",
+    "dev": "NODE_ENV=development nodemon  index.js",
+    "start": "NODE_ENV=production node  index.js",
     "lint": "eslint . --fix",
-    "test": "jest --verbose --watch"
+    "test": "NODE_ENV=test jest --silent",
+    "test:watch": "npm run test -- --watch"
   },
   "keywords": [],
   "author": "Sebastian Buitrago <johanbuitrago342@gmail.com>",
@@ -15,7 +16,8 @@
   "devDependencies": {
     "jest": "27.0.6",
     "nodemon": "2.0.12",
-    "standard": "16.0.3"
+    "standard": "16.0.3",
+    "supertest": "6.1.4"
   },
   "dependencies": {
     "@sentry/node": "^6.10.0",
@@ -32,6 +34,6 @@
     }
   },
   "jest": {
-    "testEnviroment": "node"
+    "testEnvironment": "node"
   }
 }
