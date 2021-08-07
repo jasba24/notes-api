@@ -1,7 +1,6 @@
 require('dotenv').config()
 require('./mongo')
 
-const Note = require('./models/Note')
 const express = require('express')
 const Sentry = require('@sentry/node')
 const Tracing = require('@sentry/tracing')
@@ -28,6 +27,9 @@ const cors = require('cors')
 const NotFound = require('./middleware/NotFound')
 const CastError = require('./middleware/CastError')
 
+const usersRouter = require('./controllers/users')
+const notesRouter = require('./controllers/notes')
+
 app.use(logger)
 app.use(cors())
 app.use(express.json())
@@ -42,65 +44,8 @@ app.get('/', (req, res) => {
   res.send('<h1>Hello World</h1>')
 })
 
-app.get('/api/notes', async (req, res) => {
-  const notes = await Note.find({})
-  res.json(notes)
-})
-
-app.get('/api/notes/:id', (req, res, next) => {
-  const id = req.params.id
-  Note.findById(id)
-    .then(note => {
-      if (note) {
-        res.json(note)
-      } else {
-        res.status(404).end()
-      }
-    })
-    .catch(err => next(err))
-})
-
-app.delete('/api/notes/:id', async (req, res, next) => {
-  const id = req.params.id
-  await Note.findByIdAndRemove(id)
-  res.status(204).end()
-})
-
-app.put('/api/notes/:id', (req, res, next) => {
-  const id = req.params.id
-  const note = req.body
-
-  const newNoteInfo = {
-    content: note.content,
-    important: note.important
-  }
-  Note.findByIdAndUpdate(id, newNoteInfo, { new: true }).then(result => {
-    res.json(result)
-  }).catch(err => next(err))
-})
-
-app.post('/api/notes', async (req, res, next) => {
-  const note = req.body
-
-  if (!note || !note.content) {
-    return res.status(400).json({
-      error: 'Note.content is missing'
-    })
-  }
-
-  const newNote = new Note({
-    content: note.content,
-    date: new Date().toISOString(),
-    important: typeof note.important !== 'undefined' ? note.important : false
-  })
-
-  try {
-    const saveNote = await newNote.save()
-    res.status(201).json(saveNote)
-  } catch (error) {
-    next(error)
-  }
-})
+app.use('/api/users', usersRouter)
+app.use('/api/notes', notesRouter)
 
 // The error handler must be before any other error middleware and after all controllers
 app.use(Sentry.Handlers.errorHandler())
