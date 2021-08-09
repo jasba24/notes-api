@@ -3,5 +3,6 @@ Content-Type: application/json
 
 {
 	"content": "Suscribete a @midudev",
-	"important": true
+	"important": true,
+	"userId": "611148684e9a667d0e37220d"
 }
