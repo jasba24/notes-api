@@ -1,6 +1,7 @@
 const notesRouter = require('express').Router()
 const Note = require('../models/Note')
 const User = require('../models/User')
+const UserExtractor = require('../middleware/UserExtractor')
 
 notesRouter.get('/', async (req, res) => {
   const notes = await Note.find({}).populate('user', {
@@ -23,13 +24,13 @@ notesRouter.get('/:id', (req, res, next) => {
     .catch(err => next(err))
 })
 
-notesRouter.delete('/:id', async (req, res, next) => {
+notesRouter.delete('/:id', UserExtractor, async (req, res, next) => {
   const id = req.params.id
   await Note.findByIdAndRemove(id)
   res.status(204).end()
 })
 
-notesRouter.put('/:id', (req, res, next) => {
+notesRouter.put('/:id', UserExtractor, (req, res, next) => {
   const id = req.params.id
   const note = req.body
 
@@ -42,8 +43,10 @@ notesRouter.put('/:id', (req, res, next) => {
   }).catch(err => next(err))
 })
 
-notesRouter.post('/', async (req, res, next) => {
-  const { content, important = false, userId } = req.body
+notesRouter.post('/', UserExtractor, async (req, res, next) => {
+  const { content, important = false } = req.body
+
+  const { userId } = req
 
   const user = await User.findById(userId)
 

@@ -25,10 +25,11 @@ Sentry.init({
 const logger = require('./loggerMiddleware')
 const cors = require('cors')
 const NotFound = require('./middleware/NotFound')
-const CastError = require('./middleware/CastError')
+const HandlerError = require('./middleware/HandlerError')
 
 const usersRouter = require('./controllers/users')
 const notesRouter = require('./controllers/notes')
+const loginRouter = require('./controllers/login')
 
 app.use(logger)
 app.use(cors())
@@ -46,12 +47,13 @@ app.get('/', (req, res) => {
 
 app.use('/api/users', usersRouter)
 app.use('/api/notes', notesRouter)
+app.use('/api/login', loginRouter)
 
 // The error handler must be before any other error middleware and after all controllers
 app.use(Sentry.Handlers.errorHandler())
 
 app.use(NotFound)
-app.use(CastError)
+app.use(HandlerError)
 
 const PORT = process.env.PORT || 3001
 
