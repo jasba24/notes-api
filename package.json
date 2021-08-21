@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "NODE_ENV=development nodemon  index.js",
     "start": "NODE_ENV=production node  index.js",
+    "start:test": "NODE_ENV=test node  index.js",
     "lint": "eslint . --fix",
     "test": "NODE_ENV=test PORT=1234 jest --silent tests/users.test.js",
     "test:watch": "npm run test -- --watch"
@@ -27,7 +28,8 @@
     "dotenv": "^10.0.0",
     "express": "4.17.1",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "5.13.5"
+    "mongoose": "5.13.5",
+    "mongoose-unique-validator": "2.0.3"
   },
   "eslintConfig": {
     "extends": "./node_modules/standard/eslintrc.json",
